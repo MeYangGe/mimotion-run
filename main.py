@@ -188,6 +188,7 @@ class MiMotion():
 
     def main(self):
         global K, type, area # 声明 area 以便在此处访问
+        K = 1.0
         type = ""
         try:
             user = str(self.check_item.get("user"))
@@ -202,9 +203,17 @@ class MiMotion():
                 pattern = re.compile('\\d{4}-\\d{2}-\\d{2} (\\d{2}):\\d{2}:\\d{2}')
                 find = re.search(pattern, result)
                 hour = find.group(1)
-                min_ratio = max(math.ceil((int(hour) / 3) - 1), 0)
-                max_ratio = math.ceil(int(hour) / 3)
-                step_ratio = random.uniform(min_ratio, max_ratio)
+                # 根据小时计算比率，早上时间步数少，晚上时间步数多
+                hour_int = int(hour)
+                if hour_int < 6:  # 凌晨0-6点
+                    step_ratio = 0.3
+                elif hour_int < 12:  # 早上6-12点
+                    step_ratio = 0.5 + (hour_int - 6) * 0.05  # 6点开始每小时增加0.05
+                elif hour_int < 18:  # 下午12-18点
+                    step_ratio = 0.8 + (hour_int - 12) * 0.02  # 12点开始每小时增加0.02
+                else:  # 晚上18-24点
+                    step_ratio = 0.92 + (hour_int - 18) * 0.02  # 18点开始每小时增加0.02,最大为1.0
+                step_ratio = min(step_ratio, 1.0)  # 确保不超过1.0
                 min_1 = 3500 * min_ratio
                 max_1 = 3500 * max_ratio
                 min_1 = int(K * min_1)
@@ -270,7 +279,7 @@ class MiMotion():
                     current_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     city_name = area if area != "NO" and open_get_weather == "True" else "未获取"
                     temperature_val = type if type and open_get_weather == "True" else "未获取"
-                    msg = f"🗓️ 今天是 {current_date}  \n🏙️ 城市：{city_name}  \n🤒 温度：{temperature_val}\n🤗 步数：{step}"
+                    msg = f"🗓️ 今天是 {current_date}  \n🏙️ 城市：{city_name} \n🏙️ 天气：{type} \n🤒 温度：{temperature_val}\n🤗 步数：{step}"
                     if K != 1.0 and open_get_weather == "True":
                         msg += f" (由于天气{type}，已调整步数，系数为{K})"
                     msg += "\n"
