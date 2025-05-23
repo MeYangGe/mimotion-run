@@ -280,7 +280,6 @@ class MiMotion():
                     city_name = area if area != "NO" and open_get_weather == "True" else "未获取"
                     temperature_val = type if type and open_get_weather == "True" else "未获取"
                     msg = f"🗓️ 今天是 {current_date}  \t🏙️ 城市：{city_name}  \t🤒 温度：{temperature_val}\t🤗 步数：修改失败({response.get('message', '未知错误')})\n"
-                msg = "\n".join([f"{one.get('name')}: {one.get('value')}" for one in msg])
                 return msg
             except Exception as e:
                 error_traceback = traceback.format_exc()
