@@ -203,17 +203,9 @@ class MiMotion():
                 pattern = re.compile('\\d{4}-\\d{2}-\\d{2} (\\d{2}):\\d{2}:\\d{2}')
                 find = re.search(pattern, result)
                 hour = find.group(1)
-                # 根据小时计算比率，早上时间步数少，晚上时间步数多
-                hour_int = int(hour)
-                if hour_int < 6:  # 凌晨0-6点
-                    step_ratio = 0.3
-                elif hour_int < 12:  # 早上6-12点
-                    step_ratio = 0.5 + (hour_int - 6) * 0.05  # 6点开始每小时增加0.05
-                elif hour_int < 18:  # 下午12-18点
-                    step_ratio = 0.8 + (hour_int - 12) * 0.02  # 12点开始每小时增加0.02
-                else:  # 晚上18-24点
-                    step_ratio = 0.92 + (hour_int - 18) * 0.02  # 18点开始每小时增加0.02,最大为1.0
-                step_ratio = min(step_ratio, 1.0)  # 确保不超过1.0
+                min_ratio = max(math.ceil((int(hour) / 3) - 1), 0)
+                max_ratio = math.ceil(int(hour) / 3)
+                step_ratio = random.uniform(min_ratio, max_ratio)
                 min_1 = 3500 * min_ratio
                 max_1 = 3500 * max_ratio
                 min_1 = int(K * min_1)
