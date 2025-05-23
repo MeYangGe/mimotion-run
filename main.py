@@ -91,12 +91,12 @@ class MiMotion():
             return
     @staticmethod
     # 获取区域天气情况
-    def getWeather():
+    def getWeather(K):
         if area == "NO":
             print(area == "NO")
             return
         else:
-            global K, type
+            global  type
             url = 'http://t.weather.sojson.com/api/weather/city/' + area
             hea = {'User-Agent': 'Mozilla/5.0'}
             r = requests.get(url=url, headers=hea)
@@ -188,7 +188,6 @@ class MiMotion():
 
     def main(self):
         global K, type, area # 声明 area 以便在此处访问
-        K = 1.0
         type = ""
         try:
             user = str(self.check_item.get("user"))
@@ -196,7 +195,7 @@ class MiMotion():
             hea = {'User-Agent': 'Mozilla/5.0'}
             url = r'https://apps.game.qq.com/CommArticle/app/reg/gdate.php'
             if open_get_weather == "True":
-                self.getWeather()
+                self.getWeather(K)
             r = requests.get(url=url, headers=hea)
             if r.status_code == 200:
                 result = r.text
