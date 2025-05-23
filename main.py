@@ -191,7 +191,7 @@ class MiMotion():
             return 0, None
 
     def main(self):
-        global K, type, area ,city,current_date# 声明 area 以便在此处访问
+        global K, type, area ,city,current_date,temperature_val# 声明 area 以便在此处访问
         K = 1.0
         type = ""
         try:
@@ -273,16 +273,15 @@ class MiMotion():
                 if response['message'] == "success":
                      # 使用新的模板格式化成功消息
                     city = city if area != "NO" and open_get_weather == "True" else "未获取"
-                    temperature_val = type if type and open_get_weather == "True" else "未获取"
-                    msg = f"🗓️ 今天是 {current_date} \n🏙️ 城市：{city}\n🏙️ 天气：{type}\n🤒 温度：{temperature_val}<br>🤗 步数：{step}<br>"
+                    temperature_val = temperature_val if type and open_get_weather == "True" else "未获取"
+                    msg = f"🗓️ 今天是 {current_date} \n🏙️ 城市：{city}\n🏙️ 天气：{type}\n🤒 温度：{temperature_val}\n🤗 步数：{step}\n"
                     if K != 1.0 and open_get_weather == "True":
                         msg += f" (由于天气{type}，已调整步数，系数为{K})"
-                    msg += "<br>"
                 else:
                     # 使用新的模板格式化修改失败消息
                     city = city if area != "NO" and open_get_weather == "True" else "未获取"
-                    temperature_val = type if type and open_get_weather == "True" else "未获取"
-                    msg = f"🗓️ 今天是 {current_date} \n🏙️ 城市：{city}\n🏙️ 天气：{type}\n🤒 温度：{temperature_val}<br>🤗 步数：修改失败({response.get('message', '未知错误')})<br>"
+                    temperature_val = temperature_val if type and open_get_weather == "True" else "未获取"
+                    msg = f"🗓️ 今天是 {current_date} \n🏙️ 城市：{city}\n🏙️ 天气：{type}\n🤒 温度：{temperature_val}\n🤗 步数：修改失败({response.get('message', '未知错误')})"
                 return msg
             except Exception as e:
                 error_traceback = traceback.format_exc()
