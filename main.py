@@ -2,9 +2,15 @@
 import requests, time, datetime, re, sys, os, json, random, math, traceback
 global skey,sckey,base_url,req_url,corpid,corpsecret,agentid,touser,toparty,totag,open_get_weather,area,qweather
 
+
+# 系数K查询到天气后降低步数比率，如查询得到设置地区为多云天气就会在随机后的步数乘0.9作为最终修改提交的步数
+K_dict = {"多云": 0.9, "阴": 0.8, "小雨": 0.7, "中雨": 0.5, "大雨": 0.4, "暴雨": 0.3, "大暴雨": 0.2, "特大暴雨": 0.2}
+
+
 class MiMotion():
     name = "小米运动"
 
+    # 🗓️ 今天是 {{data.DATA}}  \t🏙️ 城市：{{ctiy.DATA}}  \t🤒 温度：{{temperature.DATA}}\t🤗 步数：{{startTime.DATA}}
     def __init__(self, check_item):
         self.check_item = check_item
         self.headers = {"User-Agent": "Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/20.6.18)"}
@@ -33,17 +39,6 @@ class MiMotion():
 
             response = requests.get(server_url, params=params).text
             print(response)
-        except Exception as e:
-            error_traceback = traceback.format_exc()
-            print(error_traceback)
-
-    # 企业微信
-    def get_access_token(self):
-        try:
-            urls = base_url + 'corpid=' + corpid + '&corpsecret=' + corpsecret
-            resp = requests.get(urls).json()
-            access_token = resp['access_token']
-            return access_token
         except Exception as e:
             error_traceback = traceback.format_exc()
             print(error_traceback)
@@ -95,6 +90,39 @@ class MiMotion():
             print(e)
             return
     @staticmethod
+    # 获取区域天气情况
+    def getWeather():
+        if area == "NO":
+            print(area == "NO")
+            return
+        else:
+            global K, type
+            url = 'http://t.weather.sojson.com/api/weather/city/' + area
+            hea = {'User-Agent': 'Mozilla/5.0'}
+            r = requests.get(url=url, headers=hea)
+            if r.status_code == 200:
+                result = r.text
+                res = json.loads(result)
+                if "多云" in res['data']['forecast'][0]['type']:
+                    K = K_dict["多云"]
+                elif "阴" in res['data']['forecast'][0]['type']:
+                    K = K_dict["阴"]
+                elif "小雨" in res['data']['forecast'][0]['type']:
+                    K = K_dict["小雨"]
+                elif "中雨" in res['data']['forecast'][0]['type']:
+                    K = K_dict["中雨"]
+                elif "大雨" in res['data']['forecast'][0]['type']:
+                    K = K_dict["大雨"]
+                elif "暴雨" in res['data']['forecast'][0]['type']:
+                    K = K_dict["暴雨"]
+                elif "大暴雨" in res['data']['forecast'][0]['type']:
+                    K = K_dict["大暴雨"]
+                elif "特大暴雨" in res['data']['forecast'][0]['type']:
+                    K = K_dict["特大暴雨"]
+                type = res['data']['forecast'][0]['type']
+            else:
+                print("获取天气情况出错")
+
 
     def login(user, password):
         try:
@@ -159,24 +187,39 @@ class MiMotion():
             return 0, None
 
     def main(self):
+        global K, type
+        K = 1.0
+        type = ""
         try:
             user = str(self.check_item.get("user"))
             password = str(self.check_item.get("password"))
             hea = {'User-Agent': 'Mozilla/5.0'}
             url = r'https://apps.game.qq.com/CommArticle/app/reg/gdate.php'
+            if open_get_weather == "True":
+                self.getWeather()
             r = requests.get(url=url, headers=hea)
             if r.status_code == 200:
                 result = r.text
                 pattern = re.compile('\\d{4}-\\d{2}-\\d{2} (\\d{2}):\\d{2}:\\d{2}')
                 find = re.search(pattern, result)
                 hour = find.group(1)
-                min_ratio = int(hour) / 22
-                max_ratio = int(hour) / 21
-                step_ratio = random.uniform(min_ratio, max_ratio)
+                min_ratio = max(math.ceil((int(hour) / 3) - 1), 0)
+                max_ratio = math.ceil(int(hour) / 3)
+                min_1 = 3500 * min_ratio
+                max_1 = 3500 * max_ratio
+                min_1 = int(K * min_1)
+                max_1 = int(K * max_1)
             else:
-                min_ratio = 0.5
-                max_ratio = 0.9
-                step_ratio = random.uniform(min_ratio, max_ratio)
+                print("获取北京时间失败")
+                return
+            if min_1 != 0 and max_1 != 0:
+                if K != 1.0:
+                    msg_mi = "由于天气" + type + "，已设置降低步数,系数为" + str(K) + "。\n"
+                else:
+                    msg_mi = ""
+            else:
+                print("当前主人设置了0步数呢，本次不提交")
+                return
         except Exception as e:
             error_traceback = traceback.format_exc()
             print(error_traceback)
