@@ -267,7 +267,7 @@ class MiMotion():
                 #print(f"{response['message']}")
                 if response['message'] == "success":
                      # 使用新的模板格式化成功消息
-                    current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+                    current_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     city_name = area if area != "NO" and open_get_weather == "True" else "未获取"
                     temperature_val = type if type and open_get_weather == "True" else "未获取"
                     msg = f"🗓️ 今天是 {current_date}  \n🏙️ 城市：{city_name}  \n🤒 温度：{temperature_val}\n🤗 步数：{step}"
