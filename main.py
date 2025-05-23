@@ -240,6 +240,7 @@ class MiMotion():
             user = user
         else:
             user = "+86" + user
+        print(user, password)
         login_token, userid = self.login(user, password)
         if login_token == 0:
             msg = [
