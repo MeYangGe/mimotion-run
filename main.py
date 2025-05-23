@@ -10,7 +10,7 @@ K_dict = {"多云": 0.9, "阴": 0.8, "小雨": 0.7, "中雨": 0.5, "大雨": 0.4
 class MiMotion():
     name = "小米运动"
 
-    # 🗓️ 今天是 {{data.DATA}}  \t🏙️ 城市：{{ctiy.DATA}}  \t🤒 温度：{{temperature.DATA}}\t🤗 步数：{{startTime.DATA}}
+    # 🗓️ 今天是 {{data.DATA}}  \n🏙️ 城市：{{ctiy.DATA}}  \n🤒 温度：{{temperature.DATA}}\n🤗 步数：{{startTime.DATA}}
     def __init__(self, check_item):
         self.check_item = check_item
         self.headers = {"User-Agent": "Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/20.6.18)"}
@@ -270,7 +270,7 @@ class MiMotion():
                     current_date = datetime.datetime.now().strftime("%Y-%m-%d")
                     city_name = area if area != "NO" and open_get_weather == "True" else "未获取"
                     temperature_val = type if type and open_get_weather == "True" else "未获取"
-                    msg = f"🗓️ 今天是 {current_date}  \t🏙️ 城市：{city_name}  \t🤒 温度：{temperature_val}\t🤗 步数：{step}"
+                    msg = f"🗓️ 今天是 {current_date}  \n🏙️ 城市：{city_name}  \n🤒 温度：{temperature_val}\n🤗 步数：{step}"
                     if K != 1.0 and open_get_weather == "True":
                         msg += f" (由于天气{type}，已调整步数，系数为{K})"
                     msg += "\n"
@@ -279,7 +279,7 @@ class MiMotion():
                     current_date = datetime.datetime.now().strftime("%Y-%m-%d")
                     city_name = area if area != "NO" and open_get_weather == "True" else "未获取"
                     temperature_val = type if type and open_get_weather == "True" else "未获取"
-                    msg = f"🗓️ 今天是 {current_date}  \t🏙️ 城市：{city_name}  \t🤒 温度：{temperature_val}\t🤗 步数：修改失败({response.get('message', '未知错误')})\n"
+                    msg = f"🗓️ 今天是 {current_date}  \n🏙️ 城市：{city_name}  \n🤒 温度：{temperature_val}\n🤗 步数：修改失败({response.get('message', '未知错误')})\n"
                 return msg
             except Exception as e:
                 error_traceback = traceback.format_exc()
