@@ -124,7 +124,7 @@ class MiMotion():
                 print("获取天气情况出错")
 
 
-    def login(user, password):
+    def login(self,user, password):
         try:
             url1 = f"https://api-user.huami.com/registrations/{user}/tokens"
             headers = {
