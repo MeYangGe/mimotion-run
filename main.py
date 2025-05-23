@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 import requests, time, datetime, re, sys, os, json, random, math, traceback
-global skey,sckey,req_url,agentid,touser,toparty,totag,open_get_weather,area,qweather,city,temperature_val
+global skey,sckey,req_url,agentid,touser,toparty,totag,open_get_weather,area,qweather,city,temperature_val,current_date
 
 
 # 系数K查询到天气后降低步数比率，如查询得到设置地区为多云天气就会在随机后的步数乘0.9作为最终修改提交的步数
@@ -10,7 +10,7 @@ K_dict = {"多云": 0.9, "阴": 0.8, "小雨": 0.7, "中雨": 0.5, "大雨": 0.4
 class MiMotion():
     name = "小米运动"
 
-    # 🗓️ 今天是 {{data.DATA}}  <br>🏙️ 城市：{{ctiy.DATA}}  <br>🤒 温度：{{temperature.DATA}}<br>🤗 步数：{{startTime.DATA}}
+    # 🗓️ 今天是 {{data.DATA}} \n🏙️ 城市：{{ctiy.DATA}} \n🤒 温度：{{temperature.DATA}}<br>🤗 步数：{{startTime.DATA}}
     def __init__(self, check_item):
         self.check_item = check_item
         self.headers = {"User-Agent": "Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/20.6.18)"}
@@ -96,7 +96,7 @@ class MiMotion():
             print(area == "NO")
             return
         else:
-            global  type,city,temperature_val
+            global  type,city,temperature_val,current_date
             url = 'http://t.weather.sojson.com/api/weather/city/' + area
             hea = {'User-Agent': 'Mozilla/5.0'}
             r = requests.get(url=url, headers=hea)
@@ -123,6 +123,7 @@ class MiMotion():
                 type = res['data']['forecast'][0]['type']
                 city = res['cityInfo']['city']
                 temperature_val=res['data']['forecast'][0]['high']+"-"+res['data']['forecast'][0]['low']
+                current_date = res['time']
             else:
                 print("获取天气情况出错")
 
@@ -190,7 +191,7 @@ class MiMotion():
             return 0, None
 
     def main(self):
-        global K, type, area # 声明 area 以便在此处访问
+        global K, type, area ,city,current_date# 声明 area 以便在此处访问
         K = 1.0
         type = ""
         try:
@@ -271,19 +272,17 @@ class MiMotion():
                 #print(f"{response['message']}")
                 if response['message'] == "success":
                      # 使用新的模板格式化成功消息
-                    current_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                    city = area if area != "NO" and open_get_weather == "True" else "未获取"
+                    city = city if area != "NO" and open_get_weather == "True" else "未获取"
                     temperature_val = type if type and open_get_weather == "True" else "未获取"
-                    msg = f"🗓️ 今天是 {current_date}  <br>🏙️ 城市：{city} <br>🏙️ 天气：{type} <br>🤒 温度：{temperature_val}<br>🤗 步数：{step}<br>"
+                    msg = f"🗓️ 今天是 {current_date} \n🏙️ 城市：{city}\n🏙️ 天气：{type}\n🤒 温度：{temperature_val}<br>🤗 步数：{step}<br>"
                     if K != 1.0 and open_get_weather == "True":
                         msg += f" (由于天气{type}，已调整步数，系数为{K})"
                     msg += "<br>"
                 else:
                     # 使用新的模板格式化修改失败消息
-                    current_date = datetime.datetime.now().strftime("%Y-%m-%d")
-                    city = area if area != "NO" and open_get_weather == "True" else "未获取"
+                    city = city if area != "NO" and open_get_weather == "True" else "未获取"
                     temperature_val = type if type and open_get_weather == "True" else "未获取"
-                    msg = f"🗓️ 今天是 {current_date}  <br>🏙️ 城市：{city} <br>🏙️ 天气：{type} <br>🤒 温度：{temperature_val}<br>🤗 步数：修改失败({response.get('message', '未知错误')})<br>"
+                    msg = f"🗓️ 今天是 {current_date} \n🏙️ 城市：{city}\n🏙️ 天气：{type}\n🤒 温度：{temperature_val}<br>🤗 步数：修改失败({response.get('message', '未知错误')})<br>"
                 return msg
             except Exception as e:
                 error_traceback = traceback.format_exc()
