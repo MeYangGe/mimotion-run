@@ -187,7 +187,7 @@ class MiMotion():
             return 0, None
 
     def main(self):
-        global K, type
+        global K, type, area # 声明 area 以便在此处访问
         K = 1.0
         type = ""
         try:
@@ -225,22 +225,21 @@ class MiMotion():
             error_traceback = traceback.format_exc()
             print(error_traceback)
         try:
-            min_step = math.ceil(int(self.check_item.get("min_step", 10000))*step_ratio)
+            min_step = math.ceil(int(self.check_item.get("min_step", 10000)))
         except Exception as e:
             print("初始化步数失败: 已将最小值设置为 19999", e)
             min_step = 10000
         try:
-            max_step = math.ceil(int(self.check_item.get("max_step", 19999))*step_ratio)
+            max_step = math.ceil(int(self.check_item.get("max_step", 19999)))
         except Exception as e:
             print("初始化步数失败: 已将最大值设置为 19999", e)
             max_step = 19999
-
-        step = str(random.randint(min_step, max_step))
+        # 先在配置区间内随机，再乘以天气和时间系数
+        step = str(int(random.randint(min_step, max_step) * K * step_ratio))
         if ("+86" in user) or "@" in user:
             user = user
         else:
             user = "+86" + user
-        print(user, password)
         login_token, userid = self.login(user, password)
         if login_token == 0:
             msg = [
@@ -267,16 +266,20 @@ class MiMotion():
                 response = requests.post(url=url, data=data, headers=headers).json()
                 #print(f"{response['message']}")
                 if response['message'] == "success":
-                    msg = [
-                    {"name": "帐号信息", "value": f"{user[:4]}****{user[-4:]}"},
-                    {"name": "修改信息", "value": f"{response['message']}"},
-                    {"name": "修改步数", "value": f"{step}\n"},
-                    ]
+                     # 使用新的模板格式化成功消息
+                    current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+                    city_name = area if area != "NO" and open_get_weather == "True" else "未获取"
+                    temperature_val = type if type and open_get_weather == "True" else "未获取"
+                    msg = f"🗓️ 今天是 {current_date}  \t🏙️ 城市：{city_name}  \t🤒 温度：{temperature_val}\t🤗 步数：{step}"
+                    if K != 1.0 and open_get_weather == "True":
+                        msg += f" (由于天气{type}，已调整步数，系数为{K})"
+                    msg += "\n"
                 else:
-                    msg = [
-                        {"name": "帐号信息", "value": f"{user[:4]}****{user[-4:]}"},
-                        {"name": "修改信息", "value": f"登陆失败\n"},
-                    ]
+                    # 使用新的模板格式化修改失败消息
+                    current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+                    city_name = area if area != "NO" and open_get_weather == "True" else "未获取"
+                    temperature_val = type if type and open_get_weather == "True" else "未获取"
+                    msg = f"🗓️ 今天是 {current_date}  \t🏙️ 城市：{city_name}  \t🤒 温度：{temperature_val}\t🤗 步数：修改失败({response.get('message', '未知错误')})\n"
                 msg = "\n".join([f"{one.get('name')}: {one.get('value')}" for one in msg])
                 return msg
             except Exception as e:
