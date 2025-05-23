@@ -235,6 +235,7 @@ class MiMotion():
             print("初始化步数失败: 已将最大值设置为 19999", e)
             max_step = 19999
         # 先在配置区间内随机，再乘以天气和时间系数
+        print(min_step, max_step,K, step_ratio)
         step = str(int(random.randint(min_step, max_step) * K * step_ratio))
         if ("+86" in user) or "@" in user:
             user = user
