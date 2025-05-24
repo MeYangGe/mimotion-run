@@ -302,6 +302,7 @@ if __name__ == "__main__":
             area = datas.get("AREA")
         else:
             area = "NO"
+        msg = ""
         for i in range(len(datas.get("MIMOTION", []))):
             #print(i)
             _check_item = datas.get("MIMOTION", [])[i]
