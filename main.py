@@ -24,7 +24,7 @@ class MiMotion():
                 "bot": "1494524013"
             }
             # 发送请求
-            res = requests.post(url=url, data=data).text
+            res = requests.post(url=url, data=data.encode('utf-8')).text
             # 输出发送结果
             print(res)
         except Exception as e:
