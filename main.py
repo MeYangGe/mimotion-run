@@ -17,7 +17,7 @@ class MiMotion():
    #发送酷推
     def push(self, title, content):
         try:
-            url = "https://push.xuthus.cc/send/" + skey
+            url = "https://qmsg.zendee.cn/jsend/" + qkey
             data = title + "<br>" + content
             # 发送请求
             res = requests.post(url=url, data=data.encode('utf-8')).text
@@ -308,8 +308,8 @@ if __name__ == "__main__":
             msg += MiMotion(check_item=_check_item).main()
         print(msg)
         # 酷推skey和server酱sckey和企业微信设置，只用填一个其它留空即可
-        if datas.get("SKEY"):
-            skey = datas.get("SKEY")
+        if datas.get("QKEY"):
+            qkey = datas.get("QKEY")
             MiMotion(check_item=_check_item).push('【小米运动步数修改】', msg)
         # 推送server酱
         if datas.get("SCKEY"):

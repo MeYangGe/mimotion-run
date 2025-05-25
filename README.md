@@ -17,23 +17,24 @@
 添加名为  **CONFIG**的变量: Settings-->Secrets-->New secret ,使用下面json模板配置多账户，支持邮箱,手机号
 ```
 {
-  "SKEY": "酷推skey，如果没有，请留空",
+  "QKEY": "酷推skey，如果没有，请留空",
   "SCKEY": "server酱sckey，如果没有，请留空",
   "OPEN_GET_WEATHER": "开启根据地区天气情况降低步数，如果没有，请留空",
-  "AREA": "设置获取天气的地区（上面开启后必填）如 北京 ，如果没有，请留空",
-  "QWEATHER": "此处填写和风天气 Private KEY，申请地址https://console.qweather.com/#/apps，如果没有，请留空",
+  "AREA": "设置获取天气的地区（上面开启后必填）如 北京 ，如果没有，请留空"
   "MIMOTION": [
     {
       "max_step": "20000",
       "min_step": "10000",
-      "password": "Sitoi",
-      "user": "18888xxxxxx"
+      "user": "18888xxxxxx",
+      "password": "Sitoi"
+      
     },
     {
       "max_step": "多账号 最大步数填写，请参考上面",
       "min_step": "多账号 最小步数填写，请参考上面",
-      "password": "多账号 密码填写，请参考上面",
-      "user": "多账号 手机号填写，请参考上面"
+      "user": "多账号 手机号填写，请参考上面",
+      "password": "多账号 密码填写，请参考上面"
+      
     }
   ]
 }
@@ -47,17 +48,16 @@
 **CONFIG**示例
 ```
 {
-  "SKEY": "",
+  "QKEY": "",
   "SCKEY": "",
   "OPEN_GET_WEATHER": "",
-  "AREA": "",
-  "QWEATHER": "",
+  "AREA": ""
   "MIMOTION": [
     {
       "max_step": "20000",
       "min_step": "10000",
-      "password": "Sitoi",
-      "user": "18888xxxxxx"
+      "user": "XXXXXXXXXX@gmail.com",
+      "password": "******************"
     },
     {
       "max_step": "多账号 最大步数填写，请参考上面",
