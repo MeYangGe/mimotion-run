@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 import requests, time, datetime, re, sys, os, json, random, math, traceback
-global skey,sckey,req_url,agentid,touser,toparty,totag,open_get_weather,area,qweather,city,temperature_val,current_date
+global open_get_weather,area,city,temperature_val,current_date,msg
 
 
 # 系数K查询到天气后降低步数比率，如查询得到设置地区为多云天气就会在随机后的步数乘0.9作为最终修改提交的步数
@@ -9,7 +9,6 @@ K_dict = {"多云": 0.9, "阴": 0.8, "小雨": 0.7, "中雨": 0.5, "大雨": 0.4
 
 class MiMotion():
     name = "小米运动"
-
     # 🗓️ 今天是 {{data.DATA}} \n🏙️ 城市：{{ctiy.DATA}} \n🤒 温度：{{temperature.DATA}}<br>🤗 步数：{{startTime.DATA}}
     def __init__(self, check_item):
         self.check_item = check_item
@@ -191,9 +190,8 @@ class MiMotion():
             return 0, None
 
     def main(self):
-        global K, type, area ,city,current_date,temperature_val# 声明 area 以便在此处访问
+        global K, type, area ,city,current_date,temperature_val,msg# 声明 area 以便在此处访问
         K = 1.0
-        type = ""
         try:
             user = str(self.check_item.get("user"))
             password = str(self.check_item.get("password"))
@@ -219,9 +217,9 @@ class MiMotion():
                 return
             if min_1 != 0 and max_1 != 0:
                 if K != 1.0:
-                    msg_mi = "由于天气" + type + "，已设置降低步数,系数为" + str(K) + "。<br>"
+                    msg = "由于天气" + type + "，已设置降低步数,系数为" + str(K) + "。<br>"
                 else:
-                    msg_mi = ""
+                    msg = ""
             else:
                 print("当前主人设置了0步数呢，本次不提交")
                 return
@@ -302,7 +300,6 @@ if __name__ == "__main__":
             area = datas.get("AREA")
         else:
             area = "NO"
-        msg = ""
         for i in range(len(datas.get("MIMOTION", []))):
             #print(i)
             _check_item = datas.get("MIMOTION", [])[i]
