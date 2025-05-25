@@ -19,7 +19,7 @@ class MiMotion():
         try:
             url = "https://qmsg.zendee.cn/send/" + qkey
             data = {
-                "msg": title + "<br>" + content,
+                "msg": title + "\n" + content,
                 "qq": "63237524",
                 "bot": "1494524013"
             }
