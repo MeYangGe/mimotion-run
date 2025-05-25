@@ -17,14 +17,14 @@ class MiMotion():
    #发送酷推
     def push(self, title, content):
         try:
-            url = "https://qmsg.zendee.cn/jsend/" + qkey
+            url = "https://qmsg.zendee.cn/send/" + qkey
             data = {
-                "msg": title,
+                "msg": title + "<br>" + content,
                 "qq": "63237524",
                 "bot": "1494524013"
             }
             # 发送请求
-            res = requests.post(url=url, data=data.encode('utf-8')).text
+            res = requests.post(url=url, data=data).text
             # 输出发送结果
             print(res)
         except Exception as e:
