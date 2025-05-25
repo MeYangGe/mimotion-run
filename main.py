@@ -286,6 +286,7 @@ class MiMotion():
                 print(error_traceback)
 
 if __name__ == "__main__":
+    msg = ''
     try:
         #with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), "/root/config.json"), "r", encoding="utf-8") as f:
             #datas = json.loads(f.read())
