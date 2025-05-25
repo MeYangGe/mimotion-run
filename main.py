@@ -1,5 +1,6 @@
 # -*- coding: utf8 -*-
-import requests, time, datetime, re, sys, os, json, random, math, traceback
+import requests, time, re, os, json, random, math, traceback
+from dingtalkchatbot.chatbot import DingtalkChatbot
 global open_get_weather,area,city,temperature_val,current_date,msg
 
 
@@ -30,7 +31,17 @@ class MiMotion():
         except Exception as e:
             error_traceback = traceback.format_exc()
             print(error_traceback)
-
+        #推送钉钉
+    def push_dt(self, title, content):
+        try:
+            webhook = 'https://oapi.dingtalk.com/robot/send?access_token='+dkey
+            dingTalk = DingtalkChatbot(webhook,fail_notice=False)
+        # Markdown消息@所有人
+            dingTalk.send_markdown(title=title, text=content,
+                is_at_all=True)
+        except Exception as e:
+            error_traceback = traceback.format_exc()
+            print(error_traceback)
     # 推送server
     def push_wx(self,desp=""):
         try:
@@ -319,6 +330,10 @@ if __name__ == "__main__":
         if datas.get("SCKEY"):
             sckey = datas.get("SCKEY")
             MiMotion(check_item=_check_item).push_wx(msg)
+        # 钉钉推送
+        if datas.get("DKEY"):
+            dkey = datas.get("DKEY")
+            MiMotion(check_item=_check_item).push_dt('【小米运动步数修改】', msg)
     except Exception as e:
         # 获取报错位置的详细信息
         error_traceback = traceback.format_exc()
