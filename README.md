@@ -20,7 +20,7 @@
   "QKEY": "酷推skey，如果没有，请留空",
   "SCKEY": "server酱sckey，如果没有，请留空",
   "OPEN_GET_WEATHER": "开启根据地区天气情况降低步数，如果没有，请留空",
-  "AREA": "设置获取天气的地区（上面开启后必填）如 北京 ，如果没有，请留空"
+  "AREA": "设置获取天气的地区（上面开启后必填）如 北京 ，如果没有，请留空",
   "MIMOTION": [
     {
       "max_step": "20000",
@@ -51,7 +51,7 @@
   "QKEY": "",
   "SCKEY": "",
   "OPEN_GET_WEATHER": "",
-  "AREA": ""
+  "AREA": "",
   "MIMOTION": [
     {
       "max_step": "20000",
