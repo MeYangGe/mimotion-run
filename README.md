@@ -96,4 +96,4 @@
 
 ## 历史Star数 
 
-[![Stargazers over time](https://starchart.cc/xunichanghuan/mimotion-run.svg)](https://starchart.cc/xunichanghuan/mimotion-run)
+[![Stargazers over time](https://starchart.cc/meyangge/mimotion-run.svg)](https://starchart.cc/meyangge/mimotion-run)
