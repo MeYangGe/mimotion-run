@@ -36,9 +36,9 @@ class MiMotion():
         try:
             webhook = 'https://oapi.dingtalk.com/robot/send?access_token='+dkey
             dingTalk = DingtalkChatbot(webhook,fail_notice=False)
-        # Markdown消息@所有人
+            # Markdown消息@所有人
             dingTalk.send_markdown(title=title, text=content,
-                is_at_all=True)
+                is_at_all=true)
         except Exception as e:
             error_traceback = traceback.format_exc()
             print(error_traceback)
@@ -287,14 +287,14 @@ class MiMotion():
                      # 使用新的模板格式化成功消息
                     city = city if area != "NO" and open_get_weather == "True" else "未获取"
                     temperature_val = temperature_val if type and open_get_weather == "True" else "未获取"
-                    msg = f"🗓️ 今天是 {current_date} \n🏙️ 城市：{city}\n🏙️ 天气：{type}\n🤒 温度：{temperature_val}\n🤗 步数：{step}\n"
+                    msg = f"🗓️ 今天是 {current_date} \n🏙️ 城市：{city}\n🥶 天气：{type}\n🤒 温度：{temperature_val}\n🤗 步数：{step}\n"
                     if K != 1.0 and open_get_weather == "True":
                         msg += f" (由于天气{type}，已调整步数，系数为{K})"
                 else:
                     # 使用新的模板格式化修改失败消息
                     city = city if area != "NO" and open_get_weather == "True" else "未获取"
                     temperature_val = temperature_val if type and open_get_weather == "True" else "未获取"
-                    msg = f"🗓️ 今天是 {current_date} \n🏙️ 城市：{city}\n🏙️ 天气：{type}\n🤒 温度：{temperature_val}\n🤗 步数：修改失败({response.get('message', '未知错误')})"
+                    msg = f"🗓️ 今天是 {current_date} \n🏙️ 城市：{city}\n🥶 天气：{type}\n🤒 温度：{temperature_val}\n🤗 步数：修改失败({response.get('message', '未知错误')})"
                 return msg
             except Exception as e:
                 error_traceback = traceback.format_exc()
