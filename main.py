@@ -204,6 +204,7 @@ class MiMotion():
             print(error_traceback)
             return 0, None
 
+# ... existing code ...
     def main(self):
         global K, type, area ,city,current_date,temperature_val,msg# 声明 area 以便在此处访问
         K = 1.0
@@ -211,49 +212,56 @@ class MiMotion():
             user = str(self.check_item.get("user"))
             password = str(self.check_item.get("password"))
             hea = {'User-Agent': 'Mozilla/5.0'}
-            url = r'https://apps.game.qq.com/CommArticle/app/reg/gdate.php'
+            url = r'https://cube.meituan.com/ipromotion/cube/toc/component/base/getServerCurrentTime'
             if open_get_weather == "True":
                 self.getWeather(K)
-            r = requests.get(url=url, headers=hea)
-            if r.status_code == 200:
-                result = r.text
-                pattern = re.compile('\\d{4}-\\d{2}-\\d{2} (\\d{2}):\\d{2}:\\d{2}')
-                find = re.search(pattern, result)
-                hour = find.group(1)
-                min_ratio = max(math.ceil((int(hour) / 3) - 1), 0)
-                max_ratio = math.ceil(int(hour) / 3)
-                step_ratio = random.uniform(min_ratio, max_ratio)*0.1
-                min_1 = 3500 * min_ratio
-                max_1 = 3500 * max_ratio
-                min_1 = int(K * min_1)
-                max_1 = int(K * max_1)
+            r = requests.get(url=url, headers=hea).json()
+            if r.get('status') == 0:
+                # 计算当前时间占一天的比例
+                timestamp_ms = int(r.get('data'))
+                # 将毫秒时间戳转换为秒
+                timestamp_s = timestamp_ms / 1000
+                # 转换为datetime对象
+                dt_object = time.localtime(timestamp_s)
+                # 提取小时
+                hour = dt_object.tm_hour
+                # 提取分钟
+                minute = dt_object.tm_min
+                
+                # 修改step_ratio计算方式，使步数随时间推移而增加
+                # 从凌晨0点开始逐渐增加到晚上24点
+                step_ratio = ((hour * 60 + minute) / (24 * 60)) ** 1.5
             else:
                 print("获取北京时间失败")
                 return
-            if min_1 != 0 and max_1 != 0:
-                if K != 1.0:
-                    msg = "由于天气" + type + "，已设置降低步数,系数为" + str(K) + "。<br>"
-                else:
-                    msg = ""
-            else:
-                print("当前主人设置了0步数呢，本次不提交")
-                return
+            
         except Exception as e:
             error_traceback = traceback.format_exc()
             print(error_traceback)
         try:
             min_step = math.ceil(int(self.check_item.get("min_step", 10000)))
         except Exception as e:
-            print("初始化步数失败: 已将最小值设置为 19999", e)
+            print("初始化步数失败: 已将最小值设置为 10000", e)
             min_step = 10000
         try:
             max_step = math.ceil(int(self.check_item.get("max_step", 19999)))
         except Exception as e:
             print("初始化步数失败: 已将最大值设置为 19999", e)
             max_step = 19999
+        if max_step != 0 and min_step != 0:
+                if K != 1.0:
+                    msg = "由于天气" + type + "，已设置降低步数,系数为" + str(K) + "。<br>"
+                else:
+                    msg = ""
+        else:
+            print("当前主人设置了0步数呢，本次不提交")
+            return
         # 先在配置区间内随机，再乘以天气和时间系数
         print(min_step, max_step,K, step_ratio)
-        step = str(int(random.randint(min_step, max_step) * K * step_ratio))
+        # 修改为随时间递增的步数计算方式，取消随机性
+        # 根据时间比例计算当前步数，使步数随时间推移而增加
+        step = str(int((min_step + (max_step - min_step) * step_ratio) * K))
+        # ... existing code ...
         if ("+86" in user) or "@" in user:
             user = user
         else:
