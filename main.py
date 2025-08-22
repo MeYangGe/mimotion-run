@@ -331,17 +331,17 @@ if __name__ == "__main__":
             msg += MiMotion(check_item=_check_item).main()
         print(msg)
         # 酷推skey和server酱sckey和企业微信设置，只用填一个其它留空即可
-        if datas.get("QKEY"):
-            qkey = datas.get("QKEY")
-            MiMotion(check_item=_check_item).push('【小米运动步数修改】', msg)
+        # if datas.get("QKEY"):
+        #     qkey = datas.get("QKEY")
+        #     MiMotion(check_item=_check_item).push('【小米运动步数修改】', msg)
         # 推送server酱
-        if datas.get("SCKEY"):
-            sckey = datas.get("SCKEY")
-            MiMotion(check_item=_check_item).push_wx(msg)
+        # if datas.get("SCKEY"):
+        #     sckey = datas.get("SCKEY")
+        #     MiMotion(check_item=_check_item).push_wx(msg)
         # 钉钉推送
-        if datas.get("DKEY"):
-            dkey = datas.get("DKEY")
-            MiMotion(check_item=_check_item).push_dt('【小米运动步数修改】', msg)
+        # if datas.get("DKEY"):
+        #     dkey = datas.get("DKEY")
+        #     MiMotion(check_item=_check_item).push_dt('【小米运动步数修改】', msg)
     except Exception as e:
         # 获取报错位置的详细信息
         error_traceback = traceback.format_exc()
