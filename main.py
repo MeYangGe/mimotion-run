@@ -224,7 +224,7 @@ def push_to_push_dt(exec_results, summary):
     if PUSH_DT_TOKEN is not None and PUSH_DT_TOKEN != '' and PUSH_DT_TOKEN != 'NO':
         if PUSH_DT_HOUR is not None and PUSH_DT_HOUR.isdigit():
             if time_bj.hour != int(PUSH_DT_HOUR):
-                print(f"当前设置push_plus推送整点为：{PUSH_DT_HOUR}, 当前整点为：{time_bj.hour}，跳过推送")
+                print(f"当前设置push_dt推送整点为：{PUSH_DT_HOUR}, 当前整点为：{time_bj.hour}，跳过推送")
                 return
         html = f'<div>{summary}</div>'
         if len(exec_results) >= PUSH_DT_MAX:
@@ -238,7 +238,7 @@ def push_to_push_dt(exec_results, summary):
                 else:
                     html += f'<li><span>账号：{exec_result["user"]}</span>刷步数失败，失败原因：{exec_result["msg"]}</li>'
             html += '</ul>'
-        push_plus(f"{format_now()} 刷步数通知", html)
+        push_dt(f"{format_now()} 刷步数通知", html)
 
 
 def run_single_account(total, idx, user_mi, passwd_mi):
