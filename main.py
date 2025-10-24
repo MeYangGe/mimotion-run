@@ -12,9 +12,8 @@ import time
 import os
 
 import requests
-# 修改为：
-from .util.aes_help import encrypt_data, decrypt_data
-from .util import zepp_helper as zeppHelper
+from util.aes_help import  encrypt_data, decrypt_data
+import util.zepp_helper as zeppHelper
 
 # 获取默认值转int
 def get_int_value_default(_config: dict, _key, default):
