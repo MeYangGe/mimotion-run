@@ -81,7 +81,7 @@ def get_error_code(location):
         return None
     return result[0]
  #推送钉钉
-def push_dt(self, title, content):
+def push_dt(title, content):
     try:
         webhook = 'https://oapi.dingtalk.com/robot/send?access_token='+PUSH_DT_TOKEN
         dingTalk = DingtalkChatbot(webhook,fail_notice=True)
