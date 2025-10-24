@@ -1,23 +1,28 @@
-name: 随机定时运行
+name: Random Cron
 on:
   workflow_run:
     workflows: ["刷步数"]
     types:
       - completed
+  workflow_dispatch:
+
 jobs:
   repo-sync:
     runs-on: ubuntu-latest
     timeout-minutes: 3
-    if: github.event.workflow_run.conclusion == 'success'
+    if: github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
         with:
-          token: ${{ secrets.PAT }} #此处PAT需要申请，教程详见：https://www.jianshu.com/p/bb82b3ad1d11,需要repo和workflow权限
+          token: ${{ secrets.PAT }} #此处PAT需要申请，教程详见：README
       - name: random cron
         run: |
-          sed -i -E "s/(- cron: ')[0-9]+( [^[:space:]]+ \* \* \*')/\1$(($RANDOM % 10))\2/g" .github/workflows/run.yml
+          source cron_convert.sh
+          echo "configed CRON_HOURS ${{ vars.CRON_HOURS }}"
+          persist_execute_log ${{ github.event_name }} ${{ vars.CRON_HOURS }}
           git config user.name github-actions
-          git config user.email github-actions@github.com
+          git config user.email github-actions@users.noreply.github.com
           git add .
-          git commit -m "修改随机时间"
-          git push origin main
+          current=`TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M:%S'`
+          git commit -m "[${current}] random cron trigger by ${{ github.event_name }}"
+          git push origin master

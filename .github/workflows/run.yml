@@ -1,36 +1,41 @@
 name: 刷步数
 
 on:
-  #push:
-  #  branches: [ master ]
-  #pull_request:
-  #  branches: [ master ]
   schedule:
-    - cron: '1 0,2,5,7,9,11,12 * * *'
-  watch:
-    types: started
+    - cron: '39 1,4,7,10,12,14,23 * * *'
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - name: Checkout codes
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
+        with:
+          token: ${{ secrets.PAT }} #此处PAT需要申请，教程详见：README
       - name: Update system and install zsh
         run: |
           sudo -E apt-get -qq update
           sudo -E apt-get install zsh -y
           
       - name: 初始化Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
-          python-version: 3.8
+          python-version: "3.10"
+          
       - name: 开始
         env:
-          CONFIG: ${{ secrets.CONFIG }}
+            CONFIG: ${{ secrets.CONFIG }}
+            AES_KEY: ${{ secrets.AES_KEY }}
         run: |
-          pip install --upgrade pip
-          pip3 install requests
-          pip install DingtalkChatbot
-          python3 -u main.py
+          pip3 install requests pytz pycryptodome
+          python3 main.py
+
+      - name: persist tokens
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@users.noreply.github.com
+          git add .
+          git commit -m "persist tokens trigger by ${{ github.event_name }}"
+          git push origin master
