@@ -17,26 +17,15 @@
 添加名为  **CONFIG**的变量: Settings-->Secrets-->New secret ,使用下面json模板配置多账户，支持邮箱,手机号
 ```
 {
-  "QKEY": "酷推skey，如果没有，请留空",
-  "SCKEY": "server酱sckey，如果没有，请留空",
-  "OPEN_GET_WEATHER": "开启根据地区天气情况降低步数，如果没有，请留空",
-  "AREA": "设置获取天气的地区（上面开启后必填）如 北京 ，如果没有，请留空",
-  "MIMOTION": [
-    {
-      "max_step": "20000",
-      "min_step": "10000",
-      "user": "18888xxxxxx",
-      "password": "Sitoi"
-      
-    },
-    {
-      "max_step": "多账号 最大步数填写，请参考上面",
-      "min_step": "多账号 最小步数填写，请参考上面",
-      "user": "多账号 手机号填写，请参考上面",
-      "password": "多账号 密码填写，请参考上面"
-      
-    }
-  ]
+  "USER": "abcxxx@xx.com",
+  "PWD": "password",
+  "MIN_STEP": "18000",
+  "MAX_STEP": "25000",
+  "PUSH_DT_TOKEN": "",
+  "PUSH_DT_HOUR": "",
+  "PUSH_DT_MAX": "30",
+  "SLEEP_GAP": "5",
+  "USE_CONCURRENT": "False"
 }
 ```
 > 添加名为  **PAT** 的变量: Settings-->Secrets-->New secret
@@ -48,24 +37,15 @@
 **CONFIG**示例
 ```
 {
-  "QKEY": "",
-  "SCKEY": "",
-  "OPEN_GET_WEATHER": "",
-  "AREA": "",
-  "MIMOTION": [
-    {
-      "max_step": "20000",
-      "min_step": "10000",
-      "user": "XXXXXXXXXX@gmail.com",
-      "password": "******************"
-    },
-    {
-      "max_step": "多账号 最大步数填写，请参考上面",
-      "min_step": "多账号 最小步数填写，请参考上面",
-      "password": "多账号 密码填写，请参考上面",
-      "user": "多账号 手机号填写，请参考上面"
-    }
-  ]
+  "USER": "abcxxx@xx.com",
+  "PWD": "password",
+  "MIN_STEP": "18000",
+  "MAX_STEP": "25000",
+  "PUSH_DT_TOKEN": "",
+  "PUSH_DT_HOUR": "",
+  "PUSH_DT_MAX": "30",
+  "SLEEP_GAP": "5",
+  "USE_CONCURRENT": "False"
 }
 ```
 
