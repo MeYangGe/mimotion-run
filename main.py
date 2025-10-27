@@ -226,13 +226,6 @@ def push_to_push_dt(exec_results, summary):
             if time_bj.hour != int(PUSH_DT_HOUR):
                 print(f"当前设置push_dt推送整点为：{PUSH_DT_HOUR}, 当前整点为：{time_bj.hour}，跳过推送")
                 return
-def push_to_push_dt(exec_results, summary):
-    # 判断是否需要pushplus推送
-    if PUSH_DT_TOKEN is not None and PUSH_DT_TOKEN != '' and PUSH_DT_TOKEN != 'NO':
-        if PUSH_DT_HOUR is not None and PUSH_DT_HOUR.isdigit():
-            if time_bj.hour != int(PUSH_DT_HOUR):
-                print(f"当前设置push_dt推送整点为：{PUSH_DT_HOUR}, 当前整点为：{time_bj.hour}，跳过推送")
-                return
         # 使用Markdown格式
         markdown_content = f"## {format_now()} 刷步数通知\n\n"
         markdown_content += f"{summary}\n\n"
