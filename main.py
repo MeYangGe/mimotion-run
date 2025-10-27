@@ -226,19 +226,31 @@ def push_to_push_dt(exec_results, summary):
             if time_bj.hour != int(PUSH_DT_HOUR):
                 print(f"当前设置push_dt推送整点为：{PUSH_DT_HOUR}, 当前整点为：{time_bj.hour}，跳过推送")
                 return
-        html = f'<div>{summary}</div>'
+def push_to_push_dt(exec_results, summary):
+    # 判断是否需要pushplus推送
+    if PUSH_DT_TOKEN is not None and PUSH_DT_TOKEN != '' and PUSH_DT_TOKEN != 'NO':
+        if PUSH_DT_HOUR is not None and PUSH_DT_HOUR.isdigit():
+            if time_bj.hour != int(PUSH_DT_HOUR):
+                print(f"当前设置push_dt推送整点为：{PUSH_DT_HOUR}, 当前整点为：{time_bj.hour}，跳过推送")
+                return
+        # 使用Markdown格式
+        markdown_content = f"## {format_now()} 刷步数通知\n\n"
+        markdown_content += f"{summary}\n\n"
+
         if len(exec_results) >= PUSH_DT_MAX:
-            html += '<div>账号数量过多，详细情况请前往github actions中查看</div>'
+            markdown_content += "> 账号数量过多，详细情况请前往github actions中查看\n"
         else:
-            html += '<ul>'
+            markdown_content += "### 执行详情\n\n"
             for exec_result in exec_results:
                 success = exec_result['success']
                 if success is not None and success is True:
-                    html += f'<li><span>账号：{exec_result["user"]}</span>刷步数成功，接口返回：{exec_result["msg"]}</li>'
+                    markdown_content += f"- 账号：{exec_result['user']} ✅ 刷步数成功，接口返回：{exec_result['msg']}\n"
                 else:
-                    html += f'<li><span>账号：{exec_result["user"]}</span>刷步数失败，失败原因：{exec_result["msg"]}</li>'
-            html += '</ul>'
-        push_dt(f"{format_now()} 刷步数通知", html)
+                    markdown_content += f"- 账号：{exec_result['user']} ❌ 刷步数失败，失败原因：{exec_result['msg']}\n"
+
+        # 推送Markdown内容
+        push_dt(f"{format_now()} 刷步数通知", markdown_content)
+
 
 
 def run_single_account(total, idx, user_mi, passwd_mi):
