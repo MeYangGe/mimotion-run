@@ -1,8 +1,8 @@
 # mimotion
-![ 刷步数](https://github.com/xunichanghuan/mimotion-run/actions/workflows/run.yml/badge.svg)
-[![GitHub forks](https://img.shields.io/github/forks/xunichanghuan/mimotion-run?style=flat-square)](https://github.com/xunichanghuan/mimotion-run/network)
-[![GitHub stars](https://img.shields.io/github/stars/xunichanghuan/mimotion-run?style=flat-square)](https://github.com/xunichanghuan/mimotion-run/stargazers)
-[![GitHub issues](https://img.shields.io/github/issues/xunichanghuan/mimotion-run?style=flat-square)](https://github.com/xunichanghuan/mimotion-run/issues)
+![ 刷步数](https://github.com/MeYangGe/mimotion-run/actions/workflows/run.yml/badge.svg)
+[![GitHub forks](https://img.shields.io/github/forks/MeYangGe/mimotion-run?style=flat-square)](https://github.com/xunichanghuan/mimotion-run/network)
+[![GitHub stars](https://img.shields.io/github/stars/MeYangGe/mimotion-run?style=flat-square)](https://github.com/xunichanghuan/mimotion-run/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/MeYangGe/mimotion-run?style=flat-square)](https://github.com/xunichanghuan/mimotion-run/issues)
 
 # 小米运动自动刷步数
 
